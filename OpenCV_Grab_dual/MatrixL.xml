@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opencv_storage>
+   <MatrixL type_id="opencv-matrix">
+      <rows>3</rows>
+      <cols>3</cols>
+      <dt>f</dt>
+      <data>1170.103526 0.000000 706.445890 0.000000 1162.462373 300.166943 0.000000 0.000000 1.000000 </data>
+   </MatrixL>
+   <K type_id="opencv-matrix">
+      <rows>1</rows>
+      <cols>5</cols>
+      <dt>f</dt>
+      <data>-0.435236 0.483940 0.000000 0.000000 0.000000 </data>
+   </K>
+</opencv_storage>

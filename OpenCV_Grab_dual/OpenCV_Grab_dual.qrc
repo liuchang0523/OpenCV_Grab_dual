@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="/OpenCV_Grab_dual">
+    <file>Resources/bin_empty.ico</file>
+    <file>Resources/full_garbage.ico</file>
+    <file>Resources/cai.ico</file>
+    <file>Resources/gray.ico</file>
+    <file>Resources/Pause.ico</file>
+    <file>Resources/Save.ico</file>
+    <file>Resources/Setting.ico</file>
+    <file>Resources/Start.ico</file>
+    <file>Resources/Stop.ico</file>
+    <file>Resources/0.png</file>
+    <file>Resources/1.png</file>
+    <file>Resources/2.png</file>
+    <file>Resources/Explorer.ico</file>
+  </qresource>
+</RCC>
