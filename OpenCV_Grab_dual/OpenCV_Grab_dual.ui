@@ -32,7 +32,7 @@
          </size>
         </property>
         <property name="text">
-         <string>相机1前缀名</string>
+         <string>相机1前缀：</string>
         </property>
        </widget>
       </item>
@@ -64,7 +64,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>相机2前缀名</string>
+         <string>相机2前缀：</string>
         </property>
        </widget>
       </item>
@@ -84,6 +84,23 @@
         </property>
         <property name="text">
          <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>曝光：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox">
+        <property name="maximum">
+         <number>12</number>
+        </property>
+        <property name="value">
+         <number>6</number>
         </property>
        </widget>
       </item>

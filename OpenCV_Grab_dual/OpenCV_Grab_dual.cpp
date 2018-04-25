@@ -7,8 +7,6 @@ OpenCV_Grab_dual::OpenCV_Grab_dual(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	readSettings();
-
 	//获取可用相机数目
 	QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
 	m_cam_nums = 0;//安装了basler驱动的话会有一个basler的相机
@@ -82,6 +80,8 @@ OpenCV_Grab_dual::OpenCV_Grab_dual(QWidget *parent)
 	connect(ui.img1, SIGNAL(labelDoubleClicked()), this, SLOT(label_doubleClicked()));
 	connect(ui.img2, SIGNAL(labelDoubleClicked()), this, SLOT(label_doubleClicked_2()));
 	connect(m_ImageViewer, SIGNAL(rejected()), this, SLOT(dialog_closed()));
+
+	readSettings();
 }
 
 
@@ -165,6 +165,8 @@ void OpenCV_Grab_dual::on_actionOpen_triggered()
 		{
 			m_capture.open(open_vec[0]);
 			m_capture.set(CAP_PROP_EXPOSURE, -7);
+			m_capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+			m_capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
 			m_thread.init(m_capture, mapx_1, mapy_1);
 		}
 		else if (m_cam_nums == 2)
@@ -173,6 +175,10 @@ void OpenCV_Grab_dual::on_actionOpen_triggered()
 			m_capture_2.open(open_vec[1]);
 			m_capture.set(CAP_PROP_EXPOSURE, -7);
 			m_capture_2.set(CAP_PROP_EXPOSURE, -7);
+			m_capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+			m_capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
+			m_capture_2.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+			m_capture_2.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
 			m_thread.init(m_capture, mapx_1, mapy_1);
 			m_thread_2.init(m_capture_2, mapx_2, mapy_2);
 		}
@@ -297,9 +303,24 @@ void OpenCV_Grab_dual::on_actionDelete_triggered()
 	}
 }
 
-void OpenCV_Grab_dual::printStateChanged(int t)
+
+void OpenCV_Grab_dual::on_spinBox_valueChanged(int value)
 {
-	qDebug() << t;
+	if (m_cam_nums == 1)
+	{
+		if (m_capture.isOpened())
+		{
+			m_capture.set(CAP_PROP_EXPOSURE, value - 13);
+		}
+	}
+	else if (m_cam_nums == 2)
+	{
+		if (m_capture.isOpened() && m_capture_2.isOpened())
+		{
+			m_capture.set(CAP_PROP_EXPOSURE, value - 13);
+			m_capture_2.set(CAP_PROP_EXPOSURE, value - 13);
+		}
+	}
 }
 
 //===============================================================
@@ -356,6 +377,8 @@ void OpenCV_Grab_dual::readSettings()
 		resize(screenRect.size() * 2 / 3);
 
 	move(m_settings.value("pos", QPoint(screenRect.width() * 1 / 3, screenRect.height() * 1 / 3)).toPoint());
+
+	ui.spinBox->setValue(m_settings.value("expose").toInt());
 	m_settings.endGroup();
 }
 //===============================================================
@@ -370,5 +393,6 @@ void OpenCV_Grab_dual::writeSettings()
 	m_settings.beginGroup("mainWindow");
 	m_settings.setValue("size", size());
 	m_settings.setValue("pos", pos());
+	m_settings.setValue("expose", ui.spinBox->value());
 	m_settings.endGroup();
 }

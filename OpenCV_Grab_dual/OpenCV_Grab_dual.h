@@ -55,8 +55,7 @@ public:
 	void on_actionSettings_triggered();
 	void on_actionColor_triggered();
 	void on_actionDelete_triggered();
-
-	void printStateChanged(int);
+	void on_spinBox_valueChanged(int);
 
 	void label_doubleClicked();
 	void label_doubleClicked_2();

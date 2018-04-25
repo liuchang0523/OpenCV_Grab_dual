@@ -34,6 +34,7 @@ public:
 	Mat img_afterChange;
 	VideoCapture *m_capture;
 	Mat frame;
+	Mat m_img_show;
 	QImage m_qtFrame;
 	QString m_prefix;
 	QDir m_dir;

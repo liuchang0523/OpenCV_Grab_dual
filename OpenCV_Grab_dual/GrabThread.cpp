@@ -7,7 +7,7 @@ GrabThread::GrabThread()
 	m_num = 0;
 	m_save = false;
 	m_color = true;
-
+	unDistort = false;
 }
 
 GrabThread::~GrabThread()
@@ -32,15 +32,29 @@ void GrabThread::run()
 			{
 				remap(frame, frame, map1, map2, cv::INTER_CUBIC);
 			}
-			m_qtFrame = Mat2QImage(frame);
+			//////////////////////////////////////////////////////////////////////////
+			//显示Laplacian梯度
+			Mat gray_img;
+			cvtColor(frame, gray_img, CV_BGR2GRAY);
+			Mat imageSobel;
+			cv::Laplacian(gray_img, imageSobel, CV_16U);
+			double meanValue = mean(imageSobel)[0];
+			cvtColor(gray_img, m_img_show, CV_GRAY2RGB);
+			std::string meanValueSrting = "Laplacian: " + std::to_string(meanValue);
+			putText(m_img_show, meanValueSrting, Point(20, 50), CV_FONT_HERSHEY_COMPLEX, 0.8, Scalar(255, 255, 25), 2);
+			//////////////////////////////////////////////////////////////////////////
+
+			m_qtFrame = QImage((const unsigned char*)(m_img_show.data),
+				m_img_show.cols, m_img_show.rows,
+				m_img_show.cols*m_img_show.channels(),
+				QImage::Format_RGB888);
+			//m_qtFrame = Mat2QImage(m_img_show);
 			QApplication::processEvents();
 			//////////////////////////////////显示帧数////////////////////////////////////////
 			t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
 			double fps = 1.0 / t;
 			sprintf(str, "%.2f", fps);
 			QString Fps(str);
-			m_capture->set(CV_CAP_PROP_FRAME_WIDTH, 1280);
-			m_capture->set(CV_CAP_PROP_FRAME_HEIGHT, 720);
 			QString Resolution = QString::number(m_capture->get(CV_CAP_PROP_FRAME_WIDTH)) + "X" + QString::number(m_capture->get(CV_CAP_PROP_FRAME_HEIGHT));
 			Fps = QString::fromLocal8Bit("帧数") + Fps + "FPS" + "            " + Resolution
 				+ "            " + QString::fromLocal8Bit("已保存图片数：") + QString::number(m_num);
@@ -58,7 +72,8 @@ void GrabThread::run()
 					}
 					else
 					{
-						imwrite(m_filename.toLocal8Bit().toStdString(), img_afterChange);
+						imwrite(m_filename.toLocal8Bit().toStdString(), gray_img);
+						//imwrite(m_filename.toLocal8Bit().toStdString(), img_afterChange);
 					}
 
 				}
